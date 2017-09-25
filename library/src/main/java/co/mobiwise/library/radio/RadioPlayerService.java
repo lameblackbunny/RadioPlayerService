@@ -22,6 +22,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -29,9 +30,11 @@ import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.metadata.MetadataDecoder;
 import com.google.android.exoplayer2.metadata.id3.Id3Decoder;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -236,7 +239,9 @@ public class RadioPlayerService extends Service implements ExoPlayer.EventListen
      * @param mRadioUrl
      */
     public void play(String mRadioUrl) {
-        MediaSource mediaSource = new HlsMediaSource(Uri.parse(mRadioUrl), dataSourceFactory, mainHandler, null);
+//        MediaSource mediaSource = new HlsMediaSource(Uri.parse(mRadioUrl), dataSourceFactory, mainHandler, null);
+        MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(mRadioUrl), dataSourceFactory, new DefaultExtractorsFactory(),
+                mainHandler, null);
         radioPlayer.setPlayWhenReady(false);
         radioPlayer.prepare(mediaSource);
 
@@ -333,8 +338,11 @@ public class RadioPlayerService extends Service implements ExoPlayer.EventListen
             bandwidthMeter = new DefaultBandwidthMeter();
             defaultTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter); //AdaptiveVideoTrackSelection.Factory(bandwidthMeter);
             trackSelector = new DefaultTrackSelector(defaultTrackSelectionFactory);
-            loadControl = new DefaultLoadControl();
-            radioPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, loadControl);
+//            loadControl = new DefaultLoadControl();
+            DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this);
+
+            radioPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
+//            radioPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, loadControl);
             dataSourceFactory = new DefaultDataSourceFactory(this, Util.getUserAgent(this, "mediaPlayerSample"));
             radioPlayer.addListener(this);
         }

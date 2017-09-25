@@ -15,7 +15,7 @@ import co.mobiwise.library.radio.RadioManager;
  */
 public class RadioActivity extends Activity implements RadioListener{
 
-    private final String[] RADIO_URL = {"http://46.20.4.34/radyoland/popland.stream/playlist.m3u8"};
+    private final String[] RADIO_URL = {"http://streaming12.hstbr.net:8190/live"};
 
     Button mButtonControlStart;
     TextView mTextViewControl;
