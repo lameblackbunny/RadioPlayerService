@@ -26,6 +26,7 @@ import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.metadata.Metadata;
@@ -35,7 +36,8 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+//import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
@@ -329,7 +331,7 @@ public class RadioPlayerService extends Service implements ExoPlayer.EventListen
         if (radioPlayer == null) {
             mainHandler = new Handler();
             bandwidthMeter = new DefaultBandwidthMeter();
-            defaultTrackSelectionFactory = new AdaptiveVideoTrackSelection.Factory(bandwidthMeter);
+            defaultTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter); //AdaptiveVideoTrackSelection.Factory(bandwidthMeter);
             trackSelector = new DefaultTrackSelector(defaultTrackSelectionFactory);
             loadControl = new DefaultLoadControl();
             radioPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, loadControl);
@@ -562,12 +564,22 @@ public class RadioPlayerService extends Service implements ExoPlayer.EventListen
     }
 
     @Override
+    public void onRepeatModeChanged(int repeatMode) {
+
+    }
+
+    @Override
     public void onPlayerError(ExoPlaybackException error) {
         Log.v("TEST", "ERRORRR : " + error.getMessage());
     }
 
     @Override
     public void onPositionDiscontinuity() {
+
+    }
+
+    @Override
+    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
 
     }
 
