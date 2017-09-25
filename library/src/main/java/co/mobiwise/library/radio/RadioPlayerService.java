@@ -258,7 +258,8 @@ public class RadioPlayerService extends Service implements ExoPlayer.EventListen
     }
 
     public void stop() {
-        radioPlayer.setPlayWhenReady(false);
+//        radioPlayer.setPlayWhenReady(false);
+        radioPlayer.stop();
         mRadioState = State.STOPPED;
 
         /**
