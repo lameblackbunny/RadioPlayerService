@@ -17,6 +17,11 @@ import java.util.List;
 public class RadioManager implements IRadioManager {
 
     /**
+     * Checking for bound services
+     */
+    private static boolean isServiceBound = false;
+
+    /**
      * Logging enable/disable
      */
     private static boolean isLogging = false;
@@ -141,6 +146,7 @@ public class RadioManager implements IRadioManager {
         log("Requested to connect service.");
         Intent intent = new Intent(mContext, RadioPlayerService.class);
         mContext.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        isServiceBound = true;
     }
 
     /**
@@ -149,7 +155,10 @@ public class RadioManager implements IRadioManager {
     @Override
     public void disconnect() {
         log("Service Disconnected.");
-        mContext.unbindService(mServiceConnection);
+        if (isServiceBound) {
+            mContext.unbindService(mServiceConnection);
+            isServiceBound = false;
+        }
     }
 
     /**
